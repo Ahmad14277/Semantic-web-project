@@ -1,0 +1,120 @@
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix base: <http://www.example.org/owl/TypeOfMoterVehicle.owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix : <xml:base#> .
+
+<xml:base> rdf:type owl:Ontology .
+
+:Vehicle rdf:type owl:Class .
+
+
+:HeavyVehicle rdfs:subClassOf :Vehicle .
+:LightVehicle rdfs:subClassOf :Vehicle .
+:PVehicle rdfs:subClassOf :Vehicle .
+
+:LightVehicle rdfs:subClassOf [
+       rdf:type owl:Restriction ;
+       owl:onProperty :isFasterthan ;
+       owl:allValuesFrom :Vehicle ;
+       ] ;
+       rdfs:comment "LightVehicle are those vehicles that are Faster then other types of Vehicle ."^^xsd:string .
+
+[] rdf:type owl:AllDisjointClasses ;
+owl:members ( :HeavyVehicle :LightVehicle :PVehicle ) .
+
+:Truck rdfs:subClassOf :HeavyVehicle .
+:Car rdfs:subClassOf :LightVehicle.
+:Van rdfs:subClassOf :PVehicle .
+
+:Ferrari812 rdf:type :Car .
+
+:Ferrari rdf:type :Car .
+
+:Tesla rdf:type :Car .
+
+:MazdaB1500 rdf:type :Truck .
+
+:SuzukiBolan rdf:type :Van .
+
+[] rdf:type owl:AllDifferent ;
+          owl:distinctMembers ( :Tesla :Ferrari812  :MazdaB1500  :SuzukiBolan ) .
+
+:Use rdf:type owl:ObjectProperty ;
+       rdfs:domain :Vehicle ;
+       rdfs:range :UseFor .
+
+:Kmh rdf:type rdfs:Datatype ;
+        rdfs:subClassOf xsd:integer .
+
+:inkg rdf:type rdfs:Datatype ;
+        rdfs:subClassOf xsd:integer .
+
+:LoadCap rdf:type owl:DatatypeProperty ;
+        rdf:type owl:FunctionalProperty;
+         rdfs:domain :Vehicle ;
+         rdfs:range :inkg .
+
+:Speed rdf:type owl:DatatypeProperty ;
+        rdf:type owl:FunctionalProperty;
+       rdfs:domain :Vehicle ;
+       rdfs:range :Kmh .
+
+:colour rdf:type rdfs:Datatype ;
+        rdfs:subClassOf xsd:string .
+
+:Shade rdf:type owl:DatatypeProperty ;
+       rdfs:domain :Car ;
+       rdfs:range :colour .
+
+:Fuel rdf:type rdfs:Datatype ;
+        rdfs:subClassOf xsd:string .
+
+:Ferrari812 rdf:type :Car ;
+       :LoadCap "200"^^:inkg ;
+       :Speed "250"^^:Kmh ;
+       :Use :Personal ;
+       :Shade "Red"^^:colour;
+        :Fuel "Petrol"@en .
+
+:MazdaB1500 rdf:type :Truck ;
+       :LoadCap "1000"^^:inkg ;
+       :Speed "110"^^:Kmh ;
+       :Use :Transport ;
+       :Shade "blue"^^:colour;
+       :Fuel "Desil"@en .
+
+:SuzukiBolan rdf:type :Van ;
+       :LoadCap "200"^^:inkg ;
+       :Speed "140"^^:Kmh ;
+       :Use :Passenger ;
+       :Shade "White"^^:colour ;
+       :Fuel "Petrol"@en .
+
+:Tesla rdf:type :Car ;
+       :LoadCap "200"^^:inkg ;
+       :Speed "250"^^:Kmh ;
+       :Use :Personal ;
+       :Shade "Red"^^:colour ;
+        :Fuel "Battery"@en .
+
+
+:isFasterthan rdf:type owl:ObjectProperty ;
+       rdf:type owl:AsymmetricProperty;
+       rdfs:domain :Vehicle ;
+       rdfs:range :Vehicle .
+
+:Ferrari812 rdf:type :Car ;
+       :isFasterthan :SuzukiBolan ;
+        :isFasterthan :MazdaB1500 .
+
+:SuzukiBolan rdf:type :Van ;
+       :isFasterthan :MazdaB1500 .
+
+:Tesla rdf:type :Car;
+        :isFasterthan :MazdaB1500 ;
+        :isFasterthan :SuzukiBolan .
+
+:Ferrari owl:sameAs :Ferrari812 .
